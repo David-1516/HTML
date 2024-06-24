@@ -1,18 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
+import StudentService from '../services/StudentService';
 
 function StudentsList() {
   const [students, setStudents] = useState([]);
 
   useEffect(() => {
-    axios.get('https://localhost:7096/swagger/index.html')
-      .then(response => {
-        setStudents(response.data);
-      })
-      .catch(error => {
-        console.error('There was an error fetching the students!', error);
-      });
+    StudentService.getStudents()
+      .then(data => setStudents(data))
+      .catch(error => console.error(error));
   }, []);
 
   return (

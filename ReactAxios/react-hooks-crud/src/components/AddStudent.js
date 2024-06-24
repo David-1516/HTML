@@ -13,7 +13,7 @@ function AddStudent() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios.post('https://localhost:7096/swagger/index.html/CreateStudent', student)
+    axios.post('https://localhost:7096/api/Home/CreateStudent', student)
       .then(() => {
         navigate('/');
       })

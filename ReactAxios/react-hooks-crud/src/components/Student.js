@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import StudentService from '../services/StudentService';
 
 function Student() {
   const { id } = useParams();
@@ -8,13 +8,9 @@ function Student() {
   const [student, setStudent] = useState({ name: '', surname: '', age: '' });
 
   useEffect(() => {
-    axios.get(`https://localhost:7096/swagger/index.html/GetStudent?studentId=${id}`)
-      .then(response => {
-        setStudent(response.data);
-      })
-      .catch(error => {
-        console.error('There was an error fetching the student!', error);
-      });
+    StudentService.getStudentById(id)
+      .then(data => setStudent(data))
+      .catch(error => console.error(error));
   }, [id]);
 
   const handleChange = (e) => {
@@ -24,13 +20,9 @@ function Student() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios.put('https://localhost:7096/swagger/index.html/UpdateStudent', student)
-      .then(() => {
-        navigate('/');
-      })
-      .catch(error => {
-        console.error('There was an error updating the student!', error);
-      });
+    StudentService.updateStudent(student)
+      .then(() => navigate('/'))
+      .catch(error => console.error(error));
   };
 
   return (
