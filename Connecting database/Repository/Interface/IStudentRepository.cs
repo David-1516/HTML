@@ -13,6 +13,6 @@ namespace Collage.Repository.Interface
         Task UpdateStudentAsync(Student student, int[] majorIds);
         Task DeleteStudentAsync(int studentId);
         Task AddStudentMajorsAsync(int studentId, int[] majorIds);
-        Task<List<Student>> GetStudentsAsync(Filtering filtering, Sorting sorting, Paging paging);
+        Task<List<Student>> GetAllStudentsAsync();
     }
 }

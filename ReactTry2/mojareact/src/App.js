@@ -1,6 +1,7 @@
 import React from 'react';
 import './App.css';
-import PeopleTable from './PeopleTabel';
+import StudentList from './StudentList';
+import "bootstrap/dist/css/bootstrap.min.css";
 
 function App() {
   return (
@@ -16,22 +17,22 @@ function App() {
       </header>
 
       <main>
-        <section id="home" >
+        <section id="home">
           <img src="/Images/a726c4ff-af54-415a-9049-5004c6c7ae33.jfif" alt="Placeholder slika" className="responsive-img" />
         </section>
 
-        <PeopleTable />
+        <StudentList />
 
         <section id="contact">
           <h2>Contact</h2>
           <form action="#" method="post">
-            <label for="name">Name:</label>
+            <label htmlFor="name">Name:</label>
             <input type="text" id="name" name="name" required />
             
-            <label for="email">Email:</label>
+            <label htmlFor="email">Email:</label>
             <input type="email" id="email" name="email" required />
             
-            <label for="message">Message:</label>
+            <label htmlFor="message">Message:</label>
             <textarea id="message" name="message" required></textarea>
             
             <button type="submit">Send</button>

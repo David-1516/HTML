@@ -14,10 +14,20 @@ namespace Connecting_database.Controllers
         private readonly IStudentService _studentService;
         private readonly IMapper _mapper;
 
+
         public HomeController(IStudentService studentService, IMapper mapper)
         {
             _studentService = studentService;
             _mapper = mapper;
+        }
+
+        [HttpGet]
+        [Route("GetStudents")]
+        public async Task<IActionResult> GetStudents()
+        {
+            var students = await _studentService.GetAllStudentsAsync();
+            var studentDtos = _mapper.Map<List<StudentDto>>(students);
+            return Ok(studentDtos);
         }
 
         [HttpPost]
@@ -58,13 +68,6 @@ namespace Connecting_database.Controllers
             await _studentService.DeleteStudentAsync(studentId);
             return Ok("Student deleted successfully.");
         }
-        [HttpGet]
-        [Route("GetStudents")]
-        public async Task<IActionResult> GetStudents([FromQuery] Filtering filtering, [FromQuery] Sorting sorting, [FromQuery] Paging paging)
-        {
-            var students = await _studentService.GetStudentsAsync(filtering, sorting, paging);
-            var studentDtos = _mapper.Map<List<StudentDto>>(students);
-            return Ok(studentDtos);
-        }
+
     }
 }

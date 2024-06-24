@@ -14,6 +14,6 @@ namespace Collage.Service
         Task<Student> GetStudentAsync(int studentId);
         Task UpdateStudentAsync(Student student, int[] majorIds);
         Task DeleteStudentAsync(int studentId);
-        Task<List<Student>> GetStudentsAsync(Filtering filtering, Sorting sorting, Paging paging);
+        Task<List<Student>> GetAllStudentsAsync();
     }
 }
