@@ -23,9 +23,9 @@ namespace Collage.Repository
             {
                 await connection.OpenAsync();
 
-                var query = @"INSERT INTO Student (Name, Surname, Age, DateCreated) 
+                var query = @"INSERT INTO ""Student"" (""Name"", ""Surname"", ""Age"", ""DateCreated"") 
                               VALUES (@Name, @Surname, @Age, @DateCreated) 
-                              RETURNING Id";
+                              RETURNING ""Id""";
 
                 using (var command = new NpgsqlCommand(query, connection))
                 {
@@ -47,8 +47,8 @@ namespace Collage.Repository
             {
                 await connection.OpenAsync();
 
-                var query = @"SELECT Id, Name, Surname, Age, DateCreated 
-                              FROM Student WHERE Id = @StudentId";
+                var query = @"SELECT ""Id"", Name, ""Surname"", ""Age"", ""DateCreated"" 
+                              FROM Student WHERE ""Id"" = @StudentId";
 
                 using (var command = new NpgsqlCommand(query, connection))
                 {
@@ -81,9 +81,9 @@ namespace Collage.Repository
                 await connection.OpenAsync();
                 using (var transaction = await connection.BeginTransactionAsync())
                 {
-                    var query = @"UPDATE Student 
-                                  SET Name = @Name, Surname = @Surname, Age = @Age, DateCreated = @DateCreated 
-                                  WHERE Id = @Id";
+                    var query = @"UPDATE ""Student"" 
+                                  SET Name = @Name, ""Surname"" = @Surname, ""Age"" = @Age, ""DateCreated"" = @DateCreated 
+                                  WHERE ""Id"" = @Id";
 
                     using (var command = new NpgsqlCommand(query, connection))
                     {
@@ -95,7 +95,7 @@ namespace Collage.Repository
                         await command.ExecuteNonQueryAsync();
                     }
 
-                    var deleteMajorsQuery = @"DELETE FROM StudentMajor WHERE StudentId = @StudentId";
+                    var deleteMajorsQuery = @"DELETE FROM ""StudentMajor"" WHERE ""StudentId"" = @StudentId";
                     using (var deleteCommand = new NpgsqlCommand(deleteMajorsQuery, connection))
                     {
                         deleteCommand.Parameters.AddWithValue("@StudentId", student.Id);
@@ -116,14 +116,14 @@ namespace Collage.Repository
                 await connection.OpenAsync();
                 using (var transaction = await connection.BeginTransactionAsync())
                 {
-                    var deleteStudentMajorsQuery = @"DELETE FROM StudentMajor WHERE StudentId = @StudentId";
+                    var deleteStudentMajorsQuery = @"DELETE FROM ""StudentMajor"" WHERE ""StudentId"" = @StudentId";
                     using (var deleteCommand = new NpgsqlCommand(deleteStudentMajorsQuery, connection))
                     {
                         deleteCommand.Parameters.AddWithValue("@StudentId", studentId);
                         await deleteCommand.ExecuteNonQueryAsync();
                     }
 
-                    var deleteStudentQuery = @"DELETE FROM Student WHERE Id = @Id";
+                    var deleteStudentQuery = @"DELETE FROM ""Student"" WHERE ""Id"" = @Id";
                     using (var deleteCommand = new NpgsqlCommand(deleteStudentQuery, connection))
                     {
                         deleteCommand.Parameters.AddWithValue("@Id", studentId);
@@ -143,7 +143,7 @@ namespace Collage.Repository
 
                 foreach (var majorId in majorIds)
                 {
-                    var query = @"INSERT INTO StudentMajor (StudentId, MajorId) 
+                    var query = @"INSERT INTO ""StudentMajor"" (""StudentId"", ""MajorId"") 
                                   VALUES (@StudentId, @MajorId)";
                     using (var command = new NpgsqlCommand(query, connection))
                     {
@@ -162,12 +162,12 @@ namespace Collage.Repository
             {
                 await connection.OpenAsync();
 
-                var query = @"SELECT Id, Name, Surname, Age, DateCreated 
-                              FROM Student 
-                              WHERE (@StudentId IS NULL OR Id = @StudentId)
-                              AND (@FromDate IS NULL OR DateCreated >= @FromDate)
-                              AND (@ToDate IS NULL OR DateCreated <= @ToDate)
-                              AND (@SearchQuery IS NULL OR (Name LIKE '%' || @SearchQuery || '%' OR Surname LIKE '%' || @SearchQuery || '%'))
+                var query = @"SELECT ""Id"", ""Name"", ""Surname"", ""Age, ""DateCreated"" 
+                              FROM ""Student"" 
+                              WHERE (@StudentId IS NULL OR ""Id"" = @StudentId)
+                              AND (@FromDate IS NULL OR ""DateCreated"" >= @FromDate)
+                              AND (@ToDate IS NULL OR ""DateCreated"" <= @ToDate)
+                              AND (@SearchQuery IS NULL OR (""Name"" LIKE '%' || @SearchQuery || '%' OR Surname LIKE '%' || @SearchQuery || '%'))
                               ORDER BY 
                               CASE WHEN @OrderBy = 'Name' AND @SortOrder = 'asc' THEN Name END ASC,
                               CASE WHEN @OrderBy = 'Name' AND @SortOrder = 'desc' THEN Name END DESC,
