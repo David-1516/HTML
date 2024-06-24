@@ -155,37 +155,19 @@ namespace Collage.Repository
             }
         }
 
-        public async Task<List<Student>> GetStudentsAsync(Filtering filtering, Sorting sorting, Paging paging)
+
+        public async Task<List<Student>> GetAllStudentsAsync()
         {
             var students = new List<Student>();
             using (var connection = new NpgsqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
 
-                var query = @"SELECT ""Id"", ""Name"", ""Surname"", ""Age, ""DateCreated"" 
-                              FROM ""Student"" 
-                              WHERE (@StudentId IS NULL OR ""Id"" = @StudentId)
-                              AND (@FromDate IS NULL OR ""DateCreated"" >= @FromDate)
-                              AND (@ToDate IS NULL OR ""DateCreated"" <= @ToDate)
-                              AND (@SearchQuery IS NULL OR (""Name"" LIKE '%' || @SearchQuery || '%' OR Surname LIKE '%' || @SearchQuery || '%'))
-                              ORDER BY 
-                              CASE WHEN @OrderBy = 'Name' AND @SortOrder = 'asc' THEN Name END ASC,
-                              CASE WHEN @OrderBy = 'Name' AND @SortOrder = 'desc' THEN Name END DESC,
-                              CASE WHEN @OrderBy = 'DateCreated' AND @SortOrder = 'asc' THEN DateCreated END ASC,
-                              CASE WHEN @OrderBy = 'DateCreated' AND @SortOrder = 'desc' THEN DateCreated END DESC
-                              LIMIT @PageSize OFFSET @PageSize * (@PageNumber - 1)";
+                var query = @"SELECT ""Id"", ""Name"", ""Surname"", ""Age"", ""DateCreated"" 
+                              FROM ""Student""";
 
                 using (var command = new NpgsqlCommand(query, connection))
                 {
-                    command.Parameters.AddWithValue("@StudentId", filtering.StudentId == 0 ? (object)DBNull.Value : filtering.StudentId);
-                    command.Parameters.AddWithValue("@FromDate", filtering.FromDate ?? (object)DBNull.Value);
-                    command.Parameters.AddWithValue("@ToDate", filtering.ToDate ?? (object)DBNull.Value);
-                    command.Parameters.AddWithValue("@SearchQuery", filtering.SearchQuery ?? (object)DBNull.Value);
-                    command.Parameters.AddWithValue("@OrderBy", sorting.OrderBy ?? (object)DBNull.Value);
-                    command.Parameters.AddWithValue("@SortOrder", sorting.SortOrder ?? (object)DBNull.Value);
-                    command.Parameters.AddWithValue("@PageSize", paging.RppPageSize);
-                    command.Parameters.AddWithValue("@PageNumber", paging.PageNumber);
-
                     using (var reader = await command.ExecuteReaderAsync())
                     {
                         while (await reader.ReadAsync())
@@ -206,5 +188,6 @@ namespace Collage.Repository
 
             return students;
         }
+
     }
 }

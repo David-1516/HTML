@@ -15,6 +15,10 @@ namespace Collage.Service
         {
             _studentRepository = studentRepository;
         }
+        public async Task<List<Student>> GetAllStudentsAsync()
+        {
+            return await _studentRepository.GetAllStudentsAsync();
+        }
 
         public async Task CreateStudentAsync(Student student, int[] majorIds)
         {
@@ -40,9 +44,6 @@ namespace Collage.Service
             await _studentRepository.DeleteStudentAsync(studentId);
         }
 
-        public async Task<List<Student>> GetStudentsAsync(Filtering filtering, Sorting sorting, Paging paging)
-        {
-            return await _studentRepository.GetStudentsAsync(filtering, sorting, paging);
-        }
+
     }
 }
