@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom'; // Import useNavigate hook
+import { Link, useNavigate } from 'react-router-dom'; 
 import StudentService from '../services/StudentService';
 
 function StudentsList() {
   const [students, setStudents] = useState([]);
-  const navigate = useNavigate(); // Initialize useNavigate hook
+  const navigate = useNavigate(); 
 
   useEffect(() => {
     StudentService.getStudents()
