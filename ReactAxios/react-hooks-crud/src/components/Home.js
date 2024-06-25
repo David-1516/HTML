@@ -4,9 +4,9 @@ import StudentsList from './StudentsList';
 
 function Home() {
   return (
-    <div>
-      <h2>Students</h2>
-      <Link to="/add-student">Add Student</Link>
+    <div className="container mt-4">
+      <h2 className="mb-4">Students</h2>
+      <Link to="/add-student" className="btn btn-primary mb-4">Add Student</Link>
       <StudentsList />
     </div>
   );

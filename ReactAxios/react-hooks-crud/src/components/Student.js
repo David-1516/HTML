@@ -26,22 +26,22 @@ function Student() {
   };
 
   return (
-    <div>
-      <h2>Edit Student</h2>
+    <div className="container mt-4">
+      <h2 className="mb-4">Edit Student</h2>
       <form onSubmit={handleSubmit}>
-        <div>
-          <label>Name:</label>
-          <input type="text" name="name" value={student.name} onChange={handleChange} />
+        <div className="mb-3">
+          <label htmlFor="name" className="form-label">Name:</label>
+          <input type="text" className="form-control" id="name" name="name" value={student.name} onChange={handleChange} />
         </div>
-        <div>
-          <label>Surname:</label>
-          <input type="text" name="surname" value={student.surname} onChange={handleChange} />
+        <div className="mb-3">
+          <label htmlFor="surname" className="form-label">Surname:</label>
+          <input type="text" className="form-control" id="surname" name="surname" value={student.surname} onChange={handleChange} />
         </div>
-        <div>
-          <label>Age:</label>
-          <input type="number" name="age" value={student.age} onChange={handleChange} />
+        <div className="mb-3">
+          <label htmlFor="age" className="form-label">Age:</label>
+          <input type="number" className="form-control" id="age" name="age" value={student.age} onChange={handleChange} />
         </div>
-        <button type="submit">Save</button>
+        <button type="submit" className="btn btn-success">Save</button>
       </form>
     </div>
   );

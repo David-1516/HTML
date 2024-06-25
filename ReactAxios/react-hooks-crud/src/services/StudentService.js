@@ -7,7 +7,7 @@ const getStudents = async () => {
     const response = await axios.get(`${BASE_URL}/GetStudents`);
     return response.data;
   } catch (error) {
-    console.error('There was an error fetching the students!', error);
+    console.error('There was an error fetching the students!', error.response || error.message || error);
     throw error;
   }
 };
@@ -17,7 +17,7 @@ const getStudentById = async (id) => {
     const response = await axios.get(`${BASE_URL}/GetStudent`, { params: { studentId: id } });
     return response.data;
   } catch (error) {
-    console.error(`There was an error fetching the student with ID ${id}!`, error);
+    console.error(`There was an error fetching the student with ID ${id}!`, error.response || error.message || error);
     throw error;
   }
 };
@@ -27,7 +27,7 @@ const createStudent = async (student) => {
     const response = await axios.post(`${BASE_URL}/CreateStudent`, student);
     return response.data;
   } catch (error) {
-    console.error('There was an error creating the student!', error);
+    console.error('There was an error creating the student!', error.response || error.message || error);
     throw error;
   }
 };
@@ -37,12 +37,11 @@ const updateStudent = async (student) => {
     const response = await axios.put(`${BASE_URL}/UpdateStudent`, student);
     return response.data;
   } catch (error) {
-    console.error('There was an error updating the student!', error);
+    console.error('There was an error updating the student!', error.response || error.message || error);
     throw error;
   }
 };
 
-// Naming the export object
 const StudentService = {
   getStudents,
   getStudentById,

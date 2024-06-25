@@ -24,22 +24,21 @@ namespace Collage.Repository
                 await connection.OpenAsync();
 
                 var query = @"INSERT INTO ""Student"" (""Name"", ""Surname"", ""Age"", ""DateCreated"") 
-                              VALUES (@Name, @Surname, @Age, @DateCreated) 
-                              RETURNING ""Id""";
+                      VALUES (@Name, @Surname, @Age, @DateCreated) 
+                      RETURNING ""Id""";
 
                 using (var command = new NpgsqlCommand(query, connection))
                 {
-                    command.Parameters.AddWithValue("@Name", student.Name is null);
-                    command.Parameters.AddWithValue("@Surname", student.Surname is null);
-                    command.Parameters.AddWithValue("@Age", student.Age is null);
-                    command.Parameters.AddWithValue("@DateCreated", student.DateCreated.HasValue ? (object)student.DateCreated.Value : DBNull.Value);
+                    command.Parameters.AddWithValue("@Name", (object)student.Name ?? DBNull.Value);
+                    command.Parameters.AddWithValue("@Surname", (object)student.Surname ?? DBNull.Value);
+                    command.Parameters.AddWithValue("@Age", (object)student.Age ?? DBNull.Value);
+                    command.Parameters.AddWithValue("@DateCreated", (object)student.DateCreated ?? DBNull.Value);
                     studentId = (int)await command.ExecuteScalarAsync();
                 }
             }
 
             return studentId;
         }
-
         public async Task<Student> GetStudentByIdAsync(int studentId)
         {
             Student student = null;
