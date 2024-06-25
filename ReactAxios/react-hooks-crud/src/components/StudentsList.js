@@ -15,7 +15,14 @@ function StudentsList() {
 
   return (
     <div className="container mt-4">
+
       <h3 className="mb-4">Students List</h3>
+      <label for="Student">Filter:</label>
+
+      <select name="Student" id="Student">
+        <option value="ASC">Asc</option>
+        <option value="DESC">Desc</option>
+      </select>
       <table className="table table-striped">
         <thead className="table-dark">
           <tr>
@@ -33,7 +40,7 @@ function StudentsList() {
               <td>{student.age}</td>
               <td>
                 <Link to={`/student/${student.id}`} className="btn btn-primary btn-sm">Edit</Link>
-                <button onClick={() => navigate(`/delete-student/${student.id}`)} className="btn btn-danger btn-sm">Delete</button> {/* Use navigate here */}
+                <button onClick={() => navigate(`/delete-student/${student.id}`)} className="btn btn-danger btn-sm">Delete</button> {}
               </td>
             </tr>
           ))}
