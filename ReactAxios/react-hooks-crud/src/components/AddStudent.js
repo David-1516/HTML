@@ -13,32 +13,33 @@ function AddStudent() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios.post('https://localhost:7096/swagger/index.html/CreateStudent', student)
-      .then(() => {
+    axios.post('https://localhost:7096/api/Home/CreateStudent', student)
+      .then((response) => {
+        console.log(response.data);
         navigate('/');
       })
       .catch(error => {
-        console.error('There was an error creating the student!', error);
+        console.error('There was an error creating the student!', error.response || error.message || error);
       });
   };
 
   return (
-    <div>
-      <h2>Add Student</h2>
+    <div className="container mt-4">
+      <h2 className="mb-4">Add Student</h2>
       <form onSubmit={handleSubmit}>
-        <div>
-          <label>Name:</label>
-          <input type="text" name="name" value={student.name} onChange={handleChange} />
+        <div className="mb-3">
+          <label htmlFor="name" className="form-label">Name:</label>
+          <input type="text" className="form-control" id="name" name="name" value={student.name} onChange={handleChange} />
         </div>
-        <div>
-          <label>Surname:</label>
-          <input type="text" name="surname" value={student.surname} onChange={handleChange} />
+        <div className="mb-3">
+          <label htmlFor="surname" className="form-label">Surname:</label>
+          <input type="text" className="form-control" id="surname" name="surname" value={student.surname} onChange={handleChange} />
         </div>
-        <div>
-          <label>Age:</label>
-          <input type="number" name="age" value={student.age} onChange={handleChange} />
+        <div className="mb-3">
+          <label htmlFor="age" className="form-label">Age:</label>
+          <input type="number" className="form-control" id="age" name="age" value={student.age} onChange={handleChange} />
         </div>
-        <button type="submit">Save</button>
+        <button type="submit" className="btn btn-success">Save</button>
       </form>
     </div>
   );

@@ -24,22 +24,21 @@ namespace Collage.Repository
                 await connection.OpenAsync();
 
                 var query = @"INSERT INTO ""Student"" (""Name"", ""Surname"", ""Age"", ""DateCreated"") 
-                              VALUES (@Name, @Surname, @Age, @DateCreated) 
-                              RETURNING ""Id""";
+                      VALUES (@Name, @Surname, @Age, @DateCreated) 
+                      RETURNING ""Id""";
 
                 using (var command = new NpgsqlCommand(query, connection))
                 {
-                    command.Parameters.AddWithValue("@Name", student.Name is null);
-                    command.Parameters.AddWithValue("@Surname", student.Surname is null);
-                    command.Parameters.AddWithValue("@Age", student.Age is null);
-                    command.Parameters.AddWithValue("@DateCreated", student.DateCreated.HasValue ? (object)student.DateCreated.Value : DBNull.Value);
+                    command.Parameters.AddWithValue("@Name", (object)student.Name ?? DBNull.Value);
+                    command.Parameters.AddWithValue("@Surname", (object)student.Surname ?? DBNull.Value);
+                    command.Parameters.AddWithValue("@Age", (object)student.Age ?? DBNull.Value);
+                    command.Parameters.AddWithValue("@DateCreated", (object)student.DateCreated ?? DBNull.Value);
                     studentId = (int)await command.ExecuteScalarAsync();
                 }
             }
 
             return studentId;
         }
-
         public async Task<Student> GetStudentByIdAsync(int studentId)
         {
             Student student = null;
@@ -47,8 +46,8 @@ namespace Collage.Repository
             {
                 await connection.OpenAsync();
 
-                var query = @"SELECT ""Id"", Name, ""Surname"", ""Age"", ""DateCreated"" 
-                              FROM Student WHERE ""Id"" = @StudentId";
+                var query = @"SELECT ""Id"", ""Name"", ""Surname"", ""Age"", ""DateCreated"" 
+                              FROM ""Student"" WHERE ""Id"" = @StudentId";
 
                 using (var command = new NpgsqlCommand(query, connection))
                 {
@@ -81,33 +80,55 @@ namespace Collage.Repository
                 await connection.OpenAsync();
                 using (var transaction = await connection.BeginTransactionAsync())
                 {
-                    var query = @"UPDATE ""Student"" 
-                                  SET Name = @Name, ""Surname"" = @Surname, ""Age"" = @Age, ""DateCreated"" = @DateCreated 
-                                  WHERE ""Id"" = @Id";
-
-                    using (var command = new NpgsqlCommand(query, connection))
+                    try
                     {
-                        command.Parameters.AddWithValue("@Name", student.Name is null);
-                        command.Parameters.AddWithValue("@Surname", student.Surname is null);
-                        command.Parameters.AddWithValue("@Age", student.Age is null);
-                        command.Parameters.AddWithValue("@DateCreated", student.DateCreated.HasValue ? (object)student.DateCreated.Value : DBNull.Value);
-                        command.Parameters.AddWithValue("@Id", student.Id);
-                        await command.ExecuteNonQueryAsync();
-                    }
+                        var updateQuery = @"UPDATE ""Student"" 
+                                    SET ""Name"" = @Name, ""Surname"" = @Surname, ""Age"" = @Age, ""DateCreated"" = @DateCreated 
+                                    WHERE ""Id"" = @Id";
 
-                    var deleteMajorsQuery = @"DELETE FROM ""StudentMajor"" WHERE ""StudentId"" = @StudentId";
-                    using (var deleteCommand = new NpgsqlCommand(deleteMajorsQuery, connection))
+                        using (var command = new NpgsqlCommand(updateQuery, connection))
+                        {
+                            command.Parameters.AddWithValue("@Name", student.Name ?? (object)DBNull.Value);
+                            command.Parameters.AddWithValue("@Surname", student.Surname ?? (object)DBNull.Value);
+                            command.Parameters.AddWithValue("@Age", student.Age ?? (object)DBNull.Value);
+                            command.Parameters.AddWithValue("@DateCreated", student.DateCreated);
+                            command.Parameters.AddWithValue("@Id", student.Id);
+                            await command.ExecuteNonQueryAsync();
+                        }
+
+                        var deleteMajorsQuery = @"DELETE FROM ""StudentMajor"" WHERE ""StudentId"" = @StudentId";
+                        using (var deleteCommand = new NpgsqlCommand(deleteMajorsQuery, connection))
+                        {
+                            deleteCommand.Parameters.AddWithValue("@StudentId", student.Id);
+                            await deleteCommand.ExecuteNonQueryAsync();
+                        }
+
+                        if (majorIds != null && majorIds.Length > 0)
+                        {
+                            foreach (var majorId in majorIds)
+                            {
+                                var insertMajorQuery = @"INSERT INTO ""StudentMajor"" (""StudentId"", ""MajorId"") 
+                                                 VALUES (@StudentId, @MajorId)";
+                                using (var insertCommand = new NpgsqlCommand(insertMajorQuery, connection))
+                                {
+                                    insertCommand.Parameters.AddWithValue("@StudentId", student.Id);
+                                    insertCommand.Parameters.AddWithValue("@MajorId", majorId);
+                                    await insertCommand.ExecuteNonQueryAsync();
+                                }
+                            }
+                        }
+
+                        await transaction.CommitAsync();
+                    }
+                    catch (Exception ex)
                     {
-                        deleteCommand.Parameters.AddWithValue("@StudentId", student.Id);
-                        await deleteCommand.ExecuteNonQueryAsync();
+                        await transaction.RollbackAsync();
+                        throw new Exception("Error updating student", ex);
                     }
-
-                    await AddStudentMajorsAsync(student.Id, majorIds);
-
-                    await transaction.CommitAsync();
                 }
             }
         }
+
 
         public async Task DeleteStudentAsync(int studentId)
         {
