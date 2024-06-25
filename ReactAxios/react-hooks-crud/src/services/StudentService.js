@@ -24,7 +24,11 @@ const getStudentById = async (id) => {
 
 const createStudent = async (student) => {
   try {
-    const response = await axios.post(`${BASE_URL}/CreateStudent`, student);
+    const response = await axios.post(`${BASE_URL}/CreateStudent`, student, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
     return response.data;
   } catch (error) {
     console.error('There was an error creating the student!', error.response || error.message || error);
@@ -34,7 +38,11 @@ const createStudent = async (student) => {
 
 const updateStudent = async (student) => {
   try {
-    const response = await axios.put(`${BASE_URL}/UpdateStudent`, student);
+    const response = await axios.put(`${BASE_URL}/UpdateStudent`, student, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
     return response.data;
   } catch (error) {
     console.error('There was an error updating the student!', error.response || error.message || error);
@@ -42,11 +50,25 @@ const updateStudent = async (student) => {
   }
 };
 
+const deleteStudent = async (student) => {
+  try {
+    const response = await axios.delete(`${BASE_URL}/DeleteStudent`, student, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error('There was an error deleting the student!', error.response || error.message || error);
+    throw error;
+  }
+};
 const StudentService = {
   getStudents,
   getStudentById,
   createStudent,
-  updateStudent
+  updateStudent,
+  deleteStudent
 };
 
 export default StudentService;

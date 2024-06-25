@@ -11,6 +11,17 @@ function StudentsList() {
       .catch(error => console.error(error));
   }, []);
 
+  const handleDelete = (id) => {
+    StudentService.deleteStudent(id)
+      .then(() => {
+        console.log(`Student with ID ${id} deleted successfully.`);
+        // Optionally update state or refresh the list after deletion
+        const updatedStudents = students.filter(student => student.id !== id);
+        setStudents(updatedStudents);
+      })
+      .catch(error => console.error(error));
+  };
+
   return (
     <div className="container mt-4">
       <h3 className="mb-4">Students List</h3>
@@ -31,6 +42,7 @@ function StudentsList() {
               <td>{student.age}</td>
               <td>
                 <Link to={`/student/${student.id}`} className="btn btn-primary btn-sm">Edit</Link>
+                <button onClick={() => handleDelete(student.id)} className="btn btn-danger btn-sm">Delete</button>
               </td>
             </tr>
           ))}

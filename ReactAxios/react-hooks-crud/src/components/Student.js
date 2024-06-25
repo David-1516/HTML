@@ -5,7 +5,7 @@ import StudentService from '../services/StudentService';
 function Student() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [student, setStudent] = useState({ name: '', surname: '', age: '' });
+  const [student, setStudent] = useState({ id: '', name: '', surname: '', age: '' });
 
   useEffect(() => {
     StudentService.getStudentById(id)

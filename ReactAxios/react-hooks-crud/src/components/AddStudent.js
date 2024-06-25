@@ -14,11 +14,12 @@ function AddStudent() {
   const handleSubmit = (e) => {
     e.preventDefault();
     axios.post('https://localhost:7096/api/Home/CreateStudent', student)
-      .then(() => {
+      .then((response) => {
+        console.log(response.data);
         navigate('/');
       })
       .catch(error => {
-        console.error('There was an error creating the student!', error);
+        console.error('There was an error creating the student!', error.response || error.message || error);
       });
   };
 
