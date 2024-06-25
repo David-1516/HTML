@@ -46,8 +46,8 @@ namespace Collage.Repository
             {
                 await connection.OpenAsync();
 
-                var query = @"SELECT ""Id"", Name, ""Surname"", ""Age"", ""DateCreated"" 
-                              FROM Student WHERE ""Id"" = @StudentId";
+                var query = @"SELECT ""Id"", ""Name"", ""Surname"", ""Age"", ""DateCreated"" 
+                              FROM ""Student"" WHERE ""Id"" = @StudentId";
 
                 using (var command = new NpgsqlCommand(query, connection))
                 {

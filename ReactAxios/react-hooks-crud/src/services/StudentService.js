@@ -50,19 +50,18 @@ const updateStudent = async (student) => {
   }
 };
 
-const deleteStudent = async (student) => {
+const deleteStudent = async (id) => {
   try {
-    const response = await axios.delete(`${BASE_URL}/DeleteStudent`, student, {
-      headers: {
-        'Content-Type': 'application/json'
-      }
+    const response = await axios.delete(`${BASE_URL}/DeleteStudent`, {
+      data: { studentId: id } 
     });
-    return response.data;
+    return response.data; 
   } catch (error) {
-    console.error('There was an error deleting the student!', error.response || error.message || error);
+    console.error('Error deleting student:', error.response || error.message || error);
     throw error;
   }
 };
+
 const StudentService = {
   getStudents,
   getStudentById,

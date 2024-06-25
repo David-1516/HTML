@@ -1,26 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import StudentService from '../services/StudentService';
+import axios from 'axios';
 
 function DeleteStudent() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [student, setStudent] = useState({ id: '', name: '', surname: '', age: '' });
+  const [student, setStudent] = useState({ name: '', surname: '', age: '' });
 
   useEffect(() => {
-    StudentService.getStudentById(id)
-      .then(data => setStudent(data))
-      .catch(error => console.error(error));
+    axios.get(`https://localhost:7096/api/Home/GetStudent?studentId=${id}`)
+      .then(response => {
+        const { name, surname, age } = response.data;
+        setStudent({ name, surname, age });
+      })
+      .catch(error => console.error('Error fetching student:', error.response || error.message || error));
   }, [id]);
 
   const handleDelete = () => {
-    StudentService.deleteStudent(id)
+    axios.delete(`https://localhost:7096/api/Home/DeleteStudent?studentId=${id}`)
       .then(() => {
         console.log(`Student with ID ${id} deleted successfully.`);
-        // Optionally navigate to another page or update state after deletion
-        navigate('/students'); // Example navigation to students list page
+        navigate('/');
       })
-      .catch(error => console.error(error));
+      .catch(error => console.error('Error deleting student:', error.response || error.message || error));
   };
 
   return (

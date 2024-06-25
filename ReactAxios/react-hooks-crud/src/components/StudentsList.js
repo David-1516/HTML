@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom'; // Import useNavigate hook
 import StudentService from '../services/StudentService';
 
 function StudentsList() {
   const [students, setStudents] = useState([]);
+  const navigate = useNavigate(); // Initialize useNavigate hook
 
   useEffect(() => {
     StudentService.getStudents()
@@ -11,16 +12,6 @@ function StudentsList() {
       .catch(error => console.error(error));
   }, []);
 
-  const handleDelete = (id) => {
-    StudentService.deleteStudent(id)
-      .then(() => {
-        console.log(`Student with ID ${id} deleted successfully.`);
-        // Optionally update state or refresh the list after deletion
-        const updatedStudents = students.filter(student => student.id !== id);
-        setStudents(updatedStudents);
-      })
-      .catch(error => console.error(error));
-  };
 
   return (
     <div className="container mt-4">
@@ -42,7 +33,7 @@ function StudentsList() {
               <td>{student.age}</td>
               <td>
                 <Link to={`/student/${student.id}`} className="btn btn-primary btn-sm">Edit</Link>
-                <button onClick={() => handleDelete(student.id)} className="btn btn-danger btn-sm">Delete</button>
+                <button onClick={() => navigate(`/delete-student/${student.id}`)} className="btn btn-danger btn-sm">Delete</button> {/* Use navigate here */}
               </td>
             </tr>
           ))}
