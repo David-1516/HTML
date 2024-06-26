@@ -1,13 +1,28 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import StudentsList from './StudentsList';
 
 function Home() {
   return (
-    <div className="container mt-4">
-      <h2 className="mb-4">Students</h2>
-      <Link to="/add-student" className="btn btn-primary mb-4">Add Student</Link>
-      <StudentsList />
+    <div>
+      <nav className="navbar navbar-expand-lg navbar-light bg-light">
+        <div className="container">
+          <Link className="navbar-brand" to="/">Student Management</Link>
+          <div className="collapse navbar-collapse">
+            <ul className="navbar-nav ml-auto">
+              <li className="nav-item">
+                <Link className="nav-link" to="/grid">Grid</Link>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+      <div className='container'>
+        <div className='row justify-content-center'>
+          <div className='col-sm-4 '>
+            <h1>Manage students</h1>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
