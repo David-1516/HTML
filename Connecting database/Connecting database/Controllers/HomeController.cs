@@ -69,5 +69,14 @@ namespace Connecting_database.Controllers
             return Ok("Student deleted successfully.");
         }
 
+        [HttpGet]
+        [Route("SearchStudentsByName")]
+        public async Task<IActionResult> SearchStudentsByName(string name)
+        {
+            var students = await _studentService.GetStudentsByNameAsync(name);
+            var studentDtos = _mapper.Map<List<StudentDto>>(students);
+            return Ok(studentDtos);
+        }
+
     }
 }
