@@ -16,11 +16,14 @@ function Home() {
           </div>
         </div>
       </nav>
-      <div className='container'>
+      <div className='container-fluid'>
         <div className='row justify-content-center'>
-          <div className='col-sm-4 '>
-            <h1>Manage students</h1>
+          <div className='col-sm-3 '>
+            <h1 className='ml-10'>Manage students</h1>
           </div>
+        </div>
+        <div className='row justify-content-center'>
+          <div className='col-sm-10'> <img src="IMG_2428.png" class="img-fluid h-50 w-100" alt="..."/></div>
         </div>
       </div>
     </div>
