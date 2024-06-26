@@ -61,13 +61,19 @@ const deleteStudent = async (id) => {
     throw error;
   }
 };
-
+const getStudentsByName = async (name) => {
+    const response = await axios.get(`${BASE_URL}/SearchStudentsByName`, {
+        params: { name }
+    });
+    return response.data;
+};
 const StudentService = {
   getStudents,
   getStudentById,
   createStudent,
   updateStudent,
-  deleteStudent
+  deleteStudent,
+  getStudentsByName
 };
 
 export default StudentService;

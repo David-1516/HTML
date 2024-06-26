@@ -210,5 +210,40 @@ namespace Collage.Repository
             return students;
         }
 
+        public async Task<List<Student>> GetStudentsByNameAsync(string name)
+        {
+            var students = new List<Student>();
+            using (var connection = new NpgsqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+
+                var query = @"SELECT ""Id"", ""Name"", ""Surname"", ""Age"", ""DateCreated"" 
+                              FROM ""Student"" 
+                              WHERE ""Name"" ILIKE @Name";
+
+                using (var command = new NpgsqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@Name", "%" + name + "%");
+
+                    using (var reader = await command.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            var student = new Student
+                            {
+                                Id = reader.GetInt32(0),
+                                Name = reader.GetString(1),
+                                Surname = reader.GetString(2),
+                                Age = reader.GetString(3),
+                                DateCreated = reader.GetDateTime(4)
+                            };
+                            students.Add(student);
+                        }
+                    }
+                }
+            }
+
+            return students;
+        }
     }
 }

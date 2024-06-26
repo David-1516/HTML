@@ -4,6 +4,7 @@ import Home from './components/Home';
 import AddStudent from './components/AddStudent';
 import Student from './components/Student';
 import DeleteStudent from './components/DeleteStudent'; 
+import Grid from './components/Grid';
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
       <div>
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/grid" element={<Grid/>}/>
           <Route path="/add-student" element={<AddStudent />} />
           <Route path="/student/:id" element={<Student />} />
           <Route path="/delete-student/:id" element={<DeleteStudent />} />
