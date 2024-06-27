@@ -15,5 +15,6 @@ namespace Collage.Service
         Task UpdateStudentAsync(Student student, int[] majorIds);
         Task DeleteStudentAsync(int studentId);
         Task<List<Student>> GetAllStudentsAsync();
+        Task<List<Student>> GetStudentsByNameAsync(string name);
     }
 }

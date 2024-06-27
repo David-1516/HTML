@@ -44,6 +44,11 @@ namespace Collage.Service
             await _studentRepository.DeleteStudentAsync(studentId);
         }
 
+        public async Task<List<Student>> GetStudentsByNameAsync(string name)
+        {
+            return await _studentRepository.GetStudentsByNameAsync(name);
+        }
+
 
     }
 }
